@@ -1,25 +1,206 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.7.34202.233
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp2", "ConsoleApp2\ConsoleApp2.csproj", "{7B17C31E-492D-456A-B26B-4CBF62330B51}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B17C31E-492D-456A-B26B-4CBF62330B51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B17C31E-492D-456A-B26B-4CBF62330B51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B17C31E-492D-456A-B26B-4CBF62330B51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B17C31E-492D-456A-B26B-4CBF62330B51}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {ED293F81-4884-442C-BCC1-CAB2EF728317}
-	EndGlobalSection
-EndGlobal
+using System.Security.Cryptography;
+
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        char choise;
+        Console.WriteLine("Hello, World!");
+        library newBook = new library();
+        while (true)
+        {
+            Console.WriteLine("**********************************************************");
+            Console.WriteLine("LIBRARY MANIGMENT SYSTEM");
+            Console.WriteLine("1. Add a Book");
+            Console.WriteLine("2. Disblay Book");
+            Console.WriteLine("3. Serch by Titel");
+            Console.WriteLine("4. Serch by ID");
+            Console.WriteLine("5. Exit");
+            choise =Char.Parse(Console.ReadLine());
+            switch (choise)
+            {
+                case '1':
+                    Console.WriteLine("*********************************************");
+                    Console.WriteLine("1. Rifronce Book ");
+                    Console.WriteLine("2. Fiction Book ");
+                    char option = Char.Parse(Console.ReadLine());
+                    if (option == '1') 
+                    {
+                        Console.WriteLine("*********************************************");
+
+                        Console.WriteLine("enter the Titel : ");
+                        string TITEL = Console.ReadLine();
+
+                        Console.WriteLine("enter the Auther : ");
+                        string AUTHER = Console.ReadLine();
+
+                        Console.WriteLine("enter the ID : ");
+                        int ID =Convert.ToInt32(Console.ReadLine());
+
+                        Console.WriteLine("enter the publitied year : ");
+                        int PUBLITIONYEAR = Convert.ToInt32(Console.ReadLine());
+
+                        Console.WriteLine("enter the Riferonse code : ");
+                        int TYPE = int.Parse(Console.ReadLine());
+
+                        Riferonce riferonce = new Riferonce(TITEL, AUTHER, ID, PUBLITIONYEAR, TYPE);
+                        newBook.Set(riferonce);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("*********************************************");
+
+                        Console.WriteLine("enter the Titel : ");
+                        string TITEL = Console.ReadLine();
+
+                        Console.WriteLine("enter the Auther : ");
+                        string AUTHER = Console.ReadLine();
+
+                        Console.WriteLine("enter the ID : ");
+                        int ID = Convert.ToInt32(Console.ReadLine());
+
+                        Console.WriteLine("enter the publitied year : ");
+                        int PUBLITIONYEAR = Convert.ToInt32(Console.ReadLine());
+
+                        Console.WriteLine("enter the Fiction type : ");
+                        string TYPE = Console.ReadLine();
+
+                        Fiction fiction = new Fiction(TITEL, AUTHER, ID, PUBLITIONYEAR, TYPE);
+                        newBook.Set(fiction);
+                    }
+                    break;
+
+                case '2':
+                    newBook.get();
+                    break;
+                case '3':
+                    Console.WriteLine("*********************************************");
+                    Console.WriteLine("enter the Book Titel : ");
+                    string SerchTitel = Console.ReadLine();
+                    newBook.SerchByTitel(SerchTitel);
+                    break;
+                case '4':
+                    Console.WriteLine("*********************************************");
+                    Console.WriteLine("enter the Book ID : ");
+                    int SerchID = int.Parse(Console.ReadLine());
+                    newBook.SerchById(SerchID);
+                    break;
+            }
+        }
+
+    }
+}
+
+ class Book
+{ 
+    //THE PROPARTES AND THE VARIABUL CREATION
+    public int ID {set;  get; }
+    public int PUBLITIONYEAR { set; get; }
+    public string TITEL { set; get; }
+    public string AUTHER { set; get; }
+    public Book_type type { set; get; }
+    // THE CONSTRACTOR
+    public Book(string _Titel, string _Auther, int _Id, int _PublitiYear, Book_type _type)
+    {
+        TITEL = _Titel;
+        AUTHER = _Auther;
+        ID = _Id;
+        PUBLITIONYEAR= _PublitiYear;
+        type = _type;
+    }
+    // AN EMPTY CONSTRUCTOR 
+    public Book() { }
+}
+    //THE ENUM FOR THE TYPE OF THE BOOK 
+public enum Book_type
+{
+    Riferonce , Fiction
+}
+ class Riferonce : Book
+{
+    public int Riferonce_Code { get; set; }
+
+
+    public Riferonce(string _Titel, string _Auther, int _Id, int _PublitiYear, int _referenceCode) : base(_Titel, _Auther, _Id, _PublitiYear, Book_type.Riferonce)
+    {
+        Riferonce_Code = _referenceCode;
+    }
+}
+
+ class Fiction : Book
+{
+    public string Type { get; set; }
+    public Fiction(string _Titel, string _Auther, int _Id, int _PublitiYear, string _type) : base(_Titel, _Auther, _Id, _PublitiYear, Book_type.Fiction)
+    {
+        Type = _type;
+    }
+}
+
+class library : Book
+{   // a list to store the data
+    List<Book> books = new List<Book>();
+
+    // a constructor based on the inhereted Book class
+    public library(string _Titel, string _Auther, int _Id, int _PublitiYear, Book_type _type) : base(_Titel, _Auther, _Id, _PublitiYear, _type) { }
+
+    // an empty constructor
+    public library() { }
+    // a setmethod to store the data
+    public void Set(Book n)
+    {
+        books.Add(new Book());
+    }
+    // a get method to display the data
+    public void get()
+    {
+        foreach (Book book in books)
+        {
+            if (book is Riferonce rifer)
+            {
+                Console.WriteLine($"The Titel : " + rifer.TITEL);
+                Console.WriteLine($"The Auther : " + rifer.AUTHER);
+                Console.WriteLine($"The ID : " + rifer.ID);
+                Console.WriteLine($"The Publitied Year : " + rifer.PUBLITIONYEAR);
+                Console.WriteLine($"The Type Of The Book : " + rifer.type);
+            }
+            else if (book is Fiction fiction)
+            {
+                Console.WriteLine($"The Titel : " + fiction.TITEL);
+                Console.WriteLine($"The Auther : " + fiction.AUTHER);
+                Console.WriteLine($"The ID : " + fiction.ID);
+                Console.WriteLine($"The Publitied Year : " + fiction.PUBLITIONYEAR);
+                Console.WriteLine($"The Type Of The Book : " + fiction.type);
+            }
+        }
+    }
+    public void SerchByTitel(string _bookTitel)
+    {
+        foreach(var book in books)
+        {
+            if (_bookTitel == book.TITEL)
+            {
+                Console.WriteLine("The book is : "+ _bookTitel);
+            }
+            else
+            {
+                Console.WriteLine("the Book is Not Fund");
+            }
+        }
+    }
+    public void SerchById(int _bookId)
+    {
+        foreach (var book in books)
+        {
+            if (_bookId == book.ID)
+            {
+                Console.WriteLine("The book is : " + _bookId);
+            }
+            else
+            {
+                Console.WriteLine("the Book is Not Fund");
+            }
+        }
+    }
+}
+
